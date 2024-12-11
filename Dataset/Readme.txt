@@ -1,0 +1,1 @@
+This Folder includes a csv file of the generated dataset and a ipynb code used to clean, process and build model using machine learning
