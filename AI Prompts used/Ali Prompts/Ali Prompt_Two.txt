@@ -1,0 +1,36 @@
+Prompt: 
+ValueError                                Traceback (most recent call last)
+Cell In[48], line 14
+     11 print("Accuracy:", accuracy)
+     13 # Print precision
+---> 14 precision = precision_score(y_test, y_pred5)
+
+ValueError: Target is multiclass but average='binary'. Please choose another average setting, one of [None, 'micro', 'macro', 'weighted'].
+
+Output:
+
+The error you're seeing occurs because the `precision_score` function is set to use `average='binary'`, but your classification task is likely a multiclass problem. When you have more than two classes in your target variable, the `precision_score` function requires you to specify an appropriate `average` parameter. The options for multiclass problems are:
+
+- `None`: Returns the precision score for each class.
+- `'micro'`: Calculates precision globally by counting the total true positives and false positives.
+- `'macro'`: Calculates precision for each class individually and then averages the result, treating all classes equally.
+- `'weighted'`: Similar to `macro`, but the average is weighted by the number of true instances for each class.
+
+To fix this, you need to adjust the `average` parameter to one of the valid values for multiclass classification. Here's an example:
+
+```python
+from sklearn.metrics import precision_score
+
+# Use 'macro' or 'weighted' for multiclass classification
+precision = precision_score(y_test, y_pred5, average='macro')
+print("Precision:", precision)
+```
+
+If you want the precision for each class individually, you can set `average=None`:
+
+```python
+precision = precision_score(y_test, y_pred5, average=None)
+print("Precision for each class:", precision)
+```
+
+Choose the `average` setting based on how you want to evaluate the precision across the different classes in your problem.

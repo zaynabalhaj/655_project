@@ -1,0 +1,69 @@
+Prompt: I got 100% on both training ans testing on DecisionTreeClassifier(random_state=2), RandomForestClassifier(n_estimators=100, random_state=2), BaggingClassifier(n_estimators=100, random_state=2), XGBClassifier(n_estimators=50,random_state=2). Guide me on how to validate them in code 
+here is how i split the data:
+X_train,X_test,y_train,y_test = train_test_split(X_final,y,test_size=0.2,random_state=2).
+
+Output:
+Let's test the models that showed 100% accuracy on both the training and testing sets, as this can often indicate **overfitting**. We'll use **cross-validation** on the training set to validate them properly.
+
+---
+
+### **Models to Validate**
+
+The models with 100% accuracy on both training and testing are:
+
+1. **Decision Tree (DT)**
+2. **Random Forest (RF)**
+3. **Extreme Gradient Boosting (XGBoost)**
+4. **Bagging Classifier (BgC)**
+
+---
+
+### **Code for Cross-Validation**
+
+Let's perform **5-fold cross-validation** for these models to check their performance more rigorously.
+
+```python
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, BaggingClassifier
+from xgboost import XGBClassifier
+from sklearn.model_selection import cross_val_score
+
+# Initialize the models
+models = {
+    'Decision Tree': DecisionTreeClassifier(random_state=2),
+    'Random Forest': RandomForestClassifier(n_estimators=100, random_state=2),
+    'Bagging Classifier': BaggingClassifier(n_estimators=100, random_state=2),
+    'XGBoost': XGBClassifier(n_estimators=50,random_state=2)
+}
+
+# Perform 5-fold cross-validation for each model
+for name, model in models.items():
+    print(f"Validating {name}...")
+    cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring='accuracy')
+    print(f"{name} - Cross-Validation Scores: {cv_scores}")
+    print(f"{name} - Mean CV Accuracy: {cv_scores.mean():.4f}")
+    print("-" * 50)
+```
+
+---
+
+### **Explanation of the Code**
+
+1. **Models**: We're initializing the four models that previously showed 100% accuracy.
+   
+2. **Cross-Validation**:
+   - **5-Fold Cross-Validation** (`cv=5`) splits the training set into 5 subsets, trains on 4, and validates on 1, repeating 5 times.
+   - **`scoring='accuracy'`** measures the accuracy of the models.
+   
+3. **Output**:
+   - The **cross-validation scores** for each fold.
+   - The **mean cross-validation accuracy** to get an overall sense of performance.
+
+---
+
+### **Interpreting Results**
+
+- If the **cross-validation accuracy** is significantly lower than 100%, the model is likely **overfitting**.
+- If the cross-validation accuracy remains high, the model is more likely to generalize well.
+
+Run the code and let me know the results!
